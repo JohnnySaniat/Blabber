@@ -1,0 +1,6 @@
+@Blabber_HostAddress = http://localhost:5227
+
+GET {{Blabber_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
