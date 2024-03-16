@@ -4,7 +4,7 @@ using System.Data.Common;
 using Blabber.DTOs;
 using Blabber.Models;
 
-namespace E24_Amazon.Requests
+namespace Blabber.Requests
 {
     public class Reactions
     {

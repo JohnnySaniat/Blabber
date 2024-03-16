@@ -3,7 +3,7 @@ using Blabber.Models;
 using System.Data.Common;
 using Blabber;
 
-namespace E24_Amazon.Requests
+namespace Blabber.Requests
 {
     public class Comments
     {
