@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using Blabber.DTOs;
 using Blabber.Models;
+using System.ComponentModel.Design;
 
 namespace Blabber.Requests
 {
@@ -134,6 +135,22 @@ namespace Blabber.Requests
                 }
 
                 post.Reactions.Remove(reaction);
+                db.SaveChanges();
+                return Results.NoContent();
+            });
+
+            app.MapPut("/reactions/edit/{id}", (BlabberDbContext db, int id, string updateLabel, string updateImage) =>
+            {
+                Reaction reactionToUpdate = db.Reactions.SingleOrDefault(r => r.Id == id);
+
+                if (reactionToUpdate == null)
+                {
+                    return Results.NotFound("There was an error, the reaction you requested was not found");
+                }
+
+                reactionToUpdate.Label = updateLabel;
+                reactionToUpdate.Image = updateImage;
+
                 db.SaveChanges();
                 return Results.NoContent();
             });
