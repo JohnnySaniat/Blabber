@@ -14,7 +14,7 @@ namespace Blabber.Requests
             //checkUser
             app.MapPost("/checkuser/{uid}", (BlabberDbContext db, string uid) =>
             {
-                User validUser = db.Users.FirstOrDefault(u => u.Uid == uid);
+                var validUser = db.Users.Where(u => u.Uid == uid).ToList();
                 if (validUser == null)
                 {
                     return Results.NotFound();
@@ -31,7 +31,7 @@ namespace Blabber.Requests
             });
 
             //viewUserDetails
-            app.MapGet("/users/{userId}", (BlabberDbContext db, int userId) =>
+            app.MapGet("/users/{uid}", (BlabberDbContext db, string uid) =>
             {
                 return db.Users
                     .Include(u => u.Posts)
@@ -39,7 +39,7 @@ namespace Blabber.Requests
                     .Include(u => u.Tags)
                     .Include(u => u.Subscriptions)
                     .Include(u => u.Reactions)
-                    .FirstOrDefault(u => u.Id == userId);
+                    .FirstOrDefault(u => u.Uid == uid);
             });
 
             //createUser
@@ -47,7 +47,7 @@ namespace Blabber.Requests
             {
                 try
                 {
-                    User newUser = new() { FirstName = dto.FirstName, LastName = dto.LastName, Bio = dto.Bio, Image = dto.Image, Email = dto.Email, CreatedOn = dto.CreatedOn, Active = dto.Active, IsStaff = dto.IsStaff, Uid = dto.Uid };
+                    User newUser = new() { FirstName = dto.FirstName, LastName = dto.LastName, Bio = dto.Bio, Image = dto.Image, Email = dto.Email, CreatedOn = DateTime.Now, Active = dto.Active, IsStaff = dto.IsStaff, Uid = dto.Uid };
                     db.Users.Add(newUser);
                     db.SaveChanges();
                     return Results.Created($"/users/new/{newUser.Id}", newUser);
@@ -72,7 +72,6 @@ namespace Blabber.Requests
                 userToUpdate.Bio = dto.Bio;
                 userToUpdate.Image = dto.Image;
                 userToUpdate.Email = dto.Email;
-                userToUpdate.CreatedOn = dto.CreatedOn;
                 userToUpdate.Active = dto.Active;
                 userToUpdate.IsStaff = dto.IsStaff;
                 userToUpdate.Uid = dto.Uid;
