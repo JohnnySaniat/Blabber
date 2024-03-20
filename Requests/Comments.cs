@@ -21,9 +21,6 @@ namespace Blabber.Requests
 
                 var response = new
                 {
-                    id = post.Id,
-                    title = post.Title,
-                    image = post.Image,
                     comments = post.Comments.Select(comment => new
                     {
                         id = comment.Id,

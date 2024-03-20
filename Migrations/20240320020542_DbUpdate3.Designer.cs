@@ -3,6 +3,7 @@ using System;
 using Blabber;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blabber.Migrations
 {
     [DbContext(typeof(BlabberDbContext))]
-    partial class BlabberDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240320020542_DbUpdate3")]
+    partial class DbUpdate3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +103,7 @@ namespace Blabber.Migrations
                             Id = 1,
                             AuthorId = 1,
                             Content = "Comment 1 on post 1",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(7979),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4615),
                             PostId = 1
                         },
                         new
@@ -109,7 +111,7 @@ namespace Blabber.Migrations
                             Id = 2,
                             AuthorId = 2,
                             Content = "Comment 1 on post 2",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8029),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4666),
                             PostId = 2
                         },
                         new
@@ -117,7 +119,7 @@ namespace Blabber.Migrations
                             Id = 3,
                             AuthorId = 3,
                             Content = "Comment 1 on post 3",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8031),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4669),
                             PostId = 3
                         },
                         new
@@ -125,7 +127,7 @@ namespace Blabber.Migrations
                             Id = 4,
                             AuthorId = 4,
                             Content = "Comment 2 on post 1",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8032),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4670),
                             PostId = 1
                         });
                 });
@@ -182,7 +184,7 @@ namespace Blabber.Migrations
                             CategoryId = 1,
                             Content = "Content of post 1",
                             Image = "image1.jpg",
-                            PublicationDate = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8184),
+                            PublicationDate = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4853),
                             Title = "Post 1 Title",
                             Uid = "UdGI7YhdnMdV1iH1OED135Lh7dW2",
                             UserId = 1
@@ -194,7 +196,7 @@ namespace Blabber.Migrations
                             CategoryId = 2,
                             Content = "Content of post 2",
                             Image = "image2.jpg",
-                            PublicationDate = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8187),
+                            PublicationDate = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4856),
                             Title = "Post 2 Title",
                             Uid = "UdGI7YhdnMdV1iH1OED135Lh7dW2",
                             UserId = 2
@@ -206,7 +208,7 @@ namespace Blabber.Migrations
                             CategoryId = 3,
                             Content = "Content of post 3",
                             Image = "image3.jpg",
-                            PublicationDate = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8190),
+                            PublicationDate = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4858),
                             Title = "Post 3 Title",
                             Uid = "ldBeWPqCOhS15JveSXB2lUqcBk63",
                             UserId = 3
@@ -218,7 +220,7 @@ namespace Blabber.Migrations
                             CategoryId = 1,
                             Content = "Content of post 4",
                             Image = "image4.jpg",
-                            PublicationDate = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8192),
+                            PublicationDate = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4860),
                             Title = "Post 4 Title",
                             Uid = "yFykpTQFuOboizokvP1nSqgmuNi2",
                             UserId = 4
@@ -306,28 +308,28 @@ namespace Blabber.Migrations
                         {
                             Id = 1,
                             AuthorId = 2,
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8216),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4886),
                             FollowerId = 1
                         },
                         new
                         {
                             Id = 2,
                             AuthorId = 1,
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8219),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4890),
                             FollowerId = 2
                         },
                         new
                         {
                             Id = 3,
                             AuthorId = 4,
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8221),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4891),
                             FollowerId = 3
                         },
                         new
                         {
                             Id = 4,
                             AuthorId = 3,
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8223),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4893),
                             FollowerId = 4
                         });
                 });
@@ -427,7 +429,7 @@ namespace Blabber.Migrations
                             Id = 1,
                             Active = true,
                             Bio = "Bio of user 1",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8163),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4833),
                             Email = "john@example.com",
                             FirstName = "John",
                             Image = "image1.jpg",
@@ -440,7 +442,7 @@ namespace Blabber.Migrations
                             Id = 2,
                             Active = true,
                             Bio = "Bio of user 2",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8167),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4836),
                             Email = "jane@example.com",
                             FirstName = "Jane",
                             Image = "image2.jpg",
@@ -453,7 +455,7 @@ namespace Blabber.Migrations
                             Id = 3,
                             Active = true,
                             Bio = "Bio of user 3",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8169),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4838),
                             Email = "alex@example.com",
                             FirstName = "Alex",
                             Image = "image3.jpg",
@@ -466,7 +468,7 @@ namespace Blabber.Migrations
                             Id = 4,
                             Active = true,
                             Bio = "Bio of user 4",
-                            CreatedOn = new DateTime(2024, 3, 19, 21, 20, 23, 105, DateTimeKind.Local).AddTicks(8171),
+                            CreatedOn = new DateTime(2024, 3, 19, 21, 5, 41, 731, DateTimeKind.Local).AddTicks(4840),
                             Email = "emily@example.com",
                             FirstName = "Emily",
                             Image = "image4.jpg",
