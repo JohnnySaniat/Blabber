@@ -38,10 +38,10 @@ namespace Blabber
 
             modelBuilder.Entity<Post>().HasData(new Post[]
             {
-                new Post { Id = 1, UserId = 1, CategoryId = 1, Title = "Post 1 Title", PublicationDate = DateTime.Now, Image = "image1.jpg", Content = "Content of post 1", Approved = true },
-                new Post { Id = 2, UserId = 2, CategoryId = 2, Title = "Post 2 Title", PublicationDate = DateTime.Now, Image = "image2.jpg", Content = "Content of post 2", Approved = true },
-                new Post { Id = 3, UserId = 3, CategoryId = 3, Title = "Post 3 Title", PublicationDate = DateTime.Now, Image = "image3.jpg", Content = "Content of post 3", Approved = true },
-                new Post { Id = 4, UserId = 4, CategoryId = 1, Title = "Post 4 Title", PublicationDate = DateTime.Now, Image = "image4.jpg", Content = "Content of post 4", Approved = false }
+                new Post { Id = 1, UserId = 1, CategoryId = 1, Title = "Post 1 Title", PublicationDate = DateTime.Now, Image = "image1.jpg", Content = "Content of post 1", Approved = true, Uid = "UdGI7YhdnMdV1iH1OED135Lh7dW2" },
+                new Post { Id = 2, UserId = 2, CategoryId = 2, Title = "Post 2 Title", PublicationDate = DateTime.Now, Image = "image2.jpg", Content = "Content of post 2", Approved = true, Uid = "UdGI7YhdnMdV1iH1OED135Lh7dW2"},
+                new Post { Id = 3, UserId = 3, CategoryId = 3, Title = "Post 3 Title", PublicationDate = DateTime.Now, Image = "image3.jpg", Content = "Content of post 3", Approved = true, Uid = "ldBeWPqCOhS15JveSXB2lUqcBk63" },
+                new Post { Id = 4, UserId = 4, CategoryId = 1, Title = "Post 4 Title", PublicationDate = DateTime.Now, Image = "image4.jpg", Content = "Content of post 4", Approved = false, Uid = "yFykpTQFuOboizokvP1nSqgmuNi2" }
             });
 
             modelBuilder.Entity<Reaction>().HasData(new Reaction[]
