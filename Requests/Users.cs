@@ -31,7 +31,7 @@ namespace Blabber.Requests
             });
 
             //viewUserDetails
-            app.MapGet("/users/{userId}", (BlabberDbContext db, int userId) =>
+            app.MapGet("/users/{uid}", (BlabberDbContext db, string uid) =>
             {
                 return db.Users
                     .Include(u => u.Posts)
@@ -39,7 +39,7 @@ namespace Blabber.Requests
                     .Include(u => u.Tags)
                     .Include(u => u.Subscriptions)
                     .Include(u => u.Reactions)
-                    .FirstOrDefault(u => u.Id == userId);
+                    .FirstOrDefault(u => u.Uid == uid);
             });
 
             //createUser

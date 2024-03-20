@@ -9,5 +9,7 @@
         public string Image { get; set; }
         public string Content { get; set; }
         public bool Approved { get; set; }
+
+        public string Uid { get; set; }
     }
 }

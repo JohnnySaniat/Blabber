@@ -3,6 +3,7 @@ using System;
 using Blabber;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blabber.Migrations
 {
     [DbContext(typeof(BlabberDbContext))]
-    partial class BlabberDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319152731_JCS-Uid")]
+    partial class JCSUid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
