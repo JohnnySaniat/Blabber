@@ -12,6 +12,7 @@ namespace Blabber.Models
         public string Image { get; set; }
         public string Content { get; set; }
         public bool Approved { get; set; }
+        public string Uid { get; set; }
         public User User { get; set; }
         public Category Category { get; set; }
         public ICollection<Comment> Comments { get; set; }
