@@ -2,6 +2,8 @@
 using Blabber.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Blabber;
 
 namespace Blabber.Requests
 {
@@ -30,28 +32,47 @@ namespace Blabber.Requests
                 }
             });
 
-            app.MapGet("/posts/{postId}", (BlabberDbContext db, int postId) =>
+            app.MapGet("/posts/{id}", (BlabberDbContext db, int id) =>
+            {
+                var post = db.Posts
+                    .Include(p => p.User)
+                    .Include(p => p.Comments)
+                    .Include(p => p.Tags)
+                    .Include(p => p.Reactions)
+                    .FirstOrDefault(p => p.Id == id);
+
+                if (post != null)
+                {
+                    return Results.Ok(post);
+                }
+                else
+                {
+                    return Results.NotFound();
+                }
+            });
+
+            app.MapGet("/posts/users/{uid}", (BlabberDbContext db, string uid) =>
             {
                 try
                 {
-                    var post = db.Posts
+                    var posts = db.Posts
                         .Include(p => p.User)
                         .Include(p => p.Comments)
                         .Include(p => p.Tags)
                         .Include(p => p.Reactions)
-                        .FirstOrDefault(p => p.Id == postId);
+                        .Where(p => p.Uid == uid)
+                        .ToList();
 
-                    if (post == null)
+                    if (posts == null || posts.Count == 0)
                     {
                         return Results.NotFound();
                     }
 
-                    return Results.Ok(post);
+                    return Results.Ok(posts);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"An error occurred: {ex.Message}");
-
                     return Results.NotFound();
                 }
             });
@@ -80,97 +101,29 @@ namespace Blabber.Requests
                 }
             });
 
-            app.MapPost("/posts", async (BlabberDbContext db, PostDto postDto) =>
+            app.MapPost("/posts", (BlabberDbContext db, Post newPost) =>
             {
-                try
-                {
-                    if (postDto == null)
-                    {
-                        return Results.BadRequest("Invalid post data.");
-                    }
-
-                    var user = await db.Users.FindAsync(postDto.UserId);
-                    if (user == null)
-                    {
-                        return Results.BadRequest("Invalid user ID.");
-                    }
-
-                    var category = await db.Categories.FindAsync(postDto.CategoryId);
-                    if (category == null)
-                    {
-                        return Results.BadRequest("Invalid category ID.");
-                    }
-
-                    var post = new Post
-                    {
-                        UserId = postDto.UserId,
-                        CategoryId = postDto.CategoryId,
-                        Title = postDto.Title,
-                        PublicationDate = postDto.PublicationDate,
-                        Image = postDto.Image,
-                        Content = postDto.Content,
-                        Approved = postDto.Approved
-                    };
-
-                    db.Posts.Add(post);
-                    await db.SaveChangesAsync();
-
-                    return Results.Created($"/posts/{post.Id}", post);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An error occurred: {ex.Message}");
-
-                    return Results.StatusCode(StatusCodes.Status500InternalServerError);
-                }
+                db.Posts.Add(newPost);
+                db.SaveChanges();
+                return Results.Created($"/api/posts/{newPost.Id}", newPost);
             });
 
-            app.MapPut("/posts/{postId}", async (BlabberDbContext db, int postId, PostDto postDto) =>
+            app.MapPut("/posts/{id}", (BlabberDbContext db, int id, Post updatedPost) =>
             {
-                try
+                var postToUpdate = db.Posts.SingleOrDefault(p => p.Id == id);
+                if (postToUpdate == null)
                 {
-                    var post = await db.Posts.FindAsync(postId);
-
-                    if (post == null)
-                    {
-                        return Results.NotFound();
-                    }
-
-                    if (postDto == null)
-                    {
-                        return Results.BadRequest("Invalid post data.");
-                    }
-
-                    var user = await db.Users.FindAsync(postDto.UserId);
-                    if (user == null)
-                    {
-                        return Results.BadRequest("Invalid user ID.");
-                    }
-
-                    var category = await db.Categories.FindAsync(postDto.CategoryId);
-                    if (category == null)
-                    {
-                        return Results.BadRequest("Invalid category ID.");
-                    }
-
-                    post.UserId = postDto.UserId;
-                    post.CategoryId = postDto.CategoryId;
-                    post.Title = postDto.Title;
-                    post.PublicationDate = postDto.PublicationDate;
-                    post.Image = postDto.Image;
-                    post.Content = postDto.Content;
-                    post.Approved = postDto.Approved;
-
-                    await db.SaveChangesAsync();
-
-                    return Results.Ok(post);
+                    return Results.NotFound();
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An error occurred: {ex.Message}");
 
-                    return Results.StatusCode(StatusCodes.Status500InternalServerError);
-                }
+                postToUpdate.Title = updatedPost.Title;
+                postToUpdate.Image = updatedPost.Image;
+                postToUpdate.CategoryId = updatedPost.CategoryId;
+                postToUpdate.Content = updatedPost.Content;
+
+                db.SaveChanges();
+
+                return Results.Ok(postToUpdate);
             });
 
             app.MapDelete("/posts/{postId}/categories/{categoryId}", async (BlabberDbContext db, int postId, int categoryId) =>
@@ -235,6 +188,25 @@ namespace Blabber.Requests
 
                     return Results.StatusCode(StatusCodes.Status500InternalServerError);
                 }
+            });
+
+            app.MapGet("/posts/search", (BlabberDbContext db, string searchValue) =>
+            {
+                var searchResults = db.Posts
+                    .Include(p => p.User)
+                    .Include(p => p.Category)
+                    .Where(p =>
+                        p.Title.ToLower().Contains(searchValue.ToLower()) ||
+                        p.Content.ToLower().Contains(searchValue.ToLower()) ||
+                        p.Image.ToLower().Contains(searchValue.ToLower()) ||
+                        p.Uid.ToLower().Contains(searchValue.ToLower()) ||
+                        p.PublicationDate.ToString().Contains(searchValue) ||
+                        p.UserId.ToString().Contains(searchValue) ||
+                        (p.Category != null && p.Category.Label.ToLower().Contains(searchValue.ToLower()))
+                    )
+                    .ToList();
+
+                return searchResults.Any() ? Results.Ok(searchResults) : Results.StatusCode(204);
             });
 
         }
