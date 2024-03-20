@@ -116,16 +116,13 @@ namespace Blabber.Requests
                     return Results.NotFound();
                 }
 
-                // Update the post properties
                 postToUpdate.Title = updatedPost.Title;
                 postToUpdate.Image = updatedPost.Image;
                 postToUpdate.CategoryId = updatedPost.CategoryId;
                 postToUpdate.Content = updatedPost.Content;
 
-                // Save changes to the database
                 db.SaveChanges();
 
-                // Return a success response
                 return Results.Ok(postToUpdate);
             });
 
@@ -191,6 +188,25 @@ namespace Blabber.Requests
 
                     return Results.StatusCode(StatusCodes.Status500InternalServerError);
                 }
+            });
+
+            app.MapGet("/posts/search", (BlabberDbContext db, string searchValue) =>
+            {
+                var searchResults = db.Posts
+                    .Include(p => p.User)
+                    .Include(p => p.Category)
+                    .Where(p =>
+                        p.Title.ToLower().Contains(searchValue.ToLower()) ||
+                        p.Content.ToLower().Contains(searchValue.ToLower()) ||
+                        p.Image.ToLower().Contains(searchValue.ToLower()) ||
+                        p.Uid.ToLower().Contains(searchValue.ToLower()) ||
+                        p.PublicationDate.ToString().Contains(searchValue) ||
+                        p.UserId.ToString().Contains(searchValue) ||
+                        (p.Category != null && p.Category.Label.ToLower().Contains(searchValue.ToLower()))
+                    )
+                    .ToList();
+
+                return searchResults.Any() ? Results.Ok(searchResults) : Results.StatusCode(204);
             });
 
         }
