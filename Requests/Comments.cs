@@ -29,8 +29,10 @@ namespace Blabber.Requests
                         id = comment.Id,
                         authorId = comment.AuthorId,
                         postId = comment.PostId,
+                        Author = db.Users.Where(u => u.Id == comment.AuthorId)
+                            .Select(u => u.FirstName + " " +  u.LastName).FirstOrDefault(),
                         content = comment.Content,
-                        createdOn = comment.CreatedOn,
+                        createdOn = comment.CreatedOn.ToString("MM/dd/yy"),
                     }),
                 };
 
@@ -40,16 +42,20 @@ namespace Blabber.Requests
             // ADD A COMMENT TO A POST
             app.MapPost("/posts/{postId}/comments", (BlabberDbContext db, string comment, int postId, int authorId) =>
             {
+                //var commentAuthor = db.Comments.Include(c => c.Author).SingleOrDefault(a => a.Id == authorId);
                 if (comment == null)
                 {
                     return Results.NotFound("You must type something to submit");
                 }
 
+                var authorObj = db.Users.FirstOrDefault(u => u.Id == authorId);
                 var response = new Comment
                 {
                     PostId = postId,
                     AuthorId = authorId,
                     Content = comment,
+                    CreatedOn = DateTime.Now,
+                    Author = authorObj,
                 };
 
                 try

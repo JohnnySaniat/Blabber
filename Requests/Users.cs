@@ -14,7 +14,7 @@ namespace Blabber.Requests
             //checkUser
             app.MapPost("/checkuser/{uid}", (BlabberDbContext db, string uid) =>
             {
-                User validUser = db.Users.FirstOrDefault(u => u.Uid == uid);
+                var validUser = db.Users.Where(u => u.Uid == uid).ToList();
                 if (validUser == null)
                 {
                     return Results.NotFound();
