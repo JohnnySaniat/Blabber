@@ -37,29 +37,33 @@ namespace Blabber.Requests
             });
 
             // ADD A COMMENT TO A POST
-            app.MapPost("/posts/{postId}/comments", (BlabberDbContext db, string comment, int postId, int authorId) =>
+            app.MapPost("/posts/{postId}/comments", (BlabberDbContext db, Comment newComment, int postId) =>
             {
-                //var commentAuthor = db.Comments.Include(c => c.Author).SingleOrDefault(a => a.Id == authorId);
-                if (comment == null)
+                var post = db.Posts.FirstOrDefault(p => p.Id == postId);
+                if (post == null)
                 {
-                    return Results.NotFound("You must type something to submit");
+                    return Results.NotFound("Unable to find post");
                 }
 
-                var authorObj = db.Users.FirstOrDefault(u => u.Id == authorId);
-                var response = new Comment
+                if (string.IsNullOrEmpty(newComment.Content))
+                {
+                    return Results.BadRequest("Comments cannot be empty");
+                }
+
+                var authorId = newComment.AuthorId;
+                var comment = new Comment
                 {
                     PostId = postId,
                     AuthorId = authorId,
-                    Content = comment,
+                    Content = newComment.Content,
                     CreatedOn = DateTime.Now,
-                    Author = authorObj,
                 };
 
                 try
                 {
-                    db.Comments.Add(response);
+                    db.Comments.Add(comment);
                     db.SaveChanges();
-                    return Results.Created($"/posts/{postId}/comments/{response.Id}", response);
+                    return Results.Created($"/posts/{postId}/comments/{comment.Id}", comment);
                 }
                 catch (DbException ex)
                 {
