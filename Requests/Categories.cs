@@ -47,28 +47,27 @@ namespace Blabber.Requests
                 }
             });
 
-            app.MapDelete("/categories/{categoryId}", async (BlabberDbContext db, int categoryId) =>
+            app.MapDelete("/categories/{id}", (BlabberDbContext db, int id) =>
             {
-                try
+                var category = db.Categories.FirstOrDefault(c => c.Id == id);
+                if (category == null)
                 {
-                    var category = await db.Categories.FindAsync(categoryId);
+                    return Results.NotFound();
+                }
 
-                    if (category == null)
+                var posts = db.Posts.Where(p => p.CategoryId == id).ToList();
+                if (posts.Any())
+                {
+                    foreach (var post in posts)
                     {
-                        return Results.NotFound();
+                        post.CategoryId = null;
                     }
-
-                    db.Categories.Remove(category);
-                    await db.SaveChangesAsync();
-
-                    return Results.Ok();
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An error occurred: {ex.Message}");
 
-                    return Results.StatusCode(StatusCodes.Status500InternalServerError);
-                }
+                db.Categories.Remove(category);
+                db.SaveChanges();
+
+                return Results.Ok();
             });
 
             app.MapPut("/categories/{categoryId}", async (BlabberDbContext db, int categoryId, Category updatedCategory) =>
@@ -108,6 +107,29 @@ namespace Blabber.Requests
                     }
 
                     return Results.Ok(category.Posts);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+
+                    return Results.StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            });
+
+            app.MapGet("/categories/{categoryId}", async (BlabberDbContext db, int categoryId) =>
+            {
+                try
+                {
+                    var category = await db.Categories
+                        .Include(c => c.Posts)
+                        .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+                    if (category == null)
+                    {
+                        return Results.NotFound();
+                    }
+
+                    return Results.Ok(category);
                 }
                 catch (Exception ex)
                 {
