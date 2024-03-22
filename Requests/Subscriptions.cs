@@ -16,7 +16,7 @@ namespace Blabber.Requests
             {
                 try
                 {
-                    Subscription newSubscription = new() { FollowerId = dto.FollowerId, AuthorId = dto.AuthorId, CreatedOn = dto.CreatedOn, EndedOn = dto.EndedOn };
+                    Subscription newSubscription = new() { FollowerId = dto.FollowerId, AuthorId = dto.AuthorId, CreatedOn = DateTime.Now };
                     db.Subscriptions.Add(newSubscription);
                     db.SaveChanges();
                     return Results.Created($"/subscription/new/{newSubscription.Id}", newSubscription);
@@ -31,7 +31,9 @@ namespace Blabber.Requests
             //viewSubscriptionsByUser
             app.MapGet("/subscriptions/{userId}", (BlabberDbContext db, int userId) =>
             {
-                return db.Subscriptions.Where(s => s.FollowerId == userId).ToList();
+                return db.Subscriptions
+                        .Include(s => s.Author)
+                        .Where(s => s.FollowerId == userId).ToList();
             });
 
             //removeSubscriptionsFromUser

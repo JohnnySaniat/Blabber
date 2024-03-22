@@ -5,7 +5,5 @@ namespace Blabber.DTOs
     {
         public int FollowerId { get; set; }
         public int AuthorId { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? EndedOn { get; set; }
     }
 }
