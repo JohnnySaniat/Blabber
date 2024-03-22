@@ -47,7 +47,7 @@ namespace Blabber.Requests
             {
                 try
                 {
-                    User newUser = new() { FirstName = dto.FirstName, LastName = dto.LastName, Bio = dto.Bio, Image = dto.Image, Email = dto.Email, CreatedOn = dto.CreatedOn, Active = dto.Active, IsStaff = dto.IsStaff, Uid = dto.Uid };
+                    User newUser = new() { FirstName = dto.FirstName, LastName = dto.LastName, Bio = dto.Bio, Image = dto.Image, Email = dto.Email, CreatedOn = DateTime.Now, Active = dto.Active, IsStaff = dto.IsStaff, Uid = dto.Uid };
                     db.Users.Add(newUser);
                     db.SaveChanges();
                     return Results.Created($"/users/new/{newUser.Id}", newUser);
@@ -72,7 +72,6 @@ namespace Blabber.Requests
                 userToUpdate.Bio = dto.Bio;
                 userToUpdate.Image = dto.Image;
                 userToUpdate.Email = dto.Email;
-                userToUpdate.CreatedOn = dto.CreatedOn;
                 userToUpdate.Active = dto.Active;
                 userToUpdate.IsStaff = dto.IsStaff;
                 userToUpdate.Uid = dto.Uid;
