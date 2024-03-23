@@ -21,16 +21,15 @@ namespace Blabber.Requests
 
                 var response = new
                 {
-                    id = post.Id,
-                    title = post.Title,
-                    image = post.Image,
                     comments = post.Comments.Select(comment => new
                     {
                         id = comment.Id,
                         authorId = comment.AuthorId,
                         postId = comment.PostId,
+                        Author = db.Users.Where(u => u.Id == comment.AuthorId)
+                            .Select(u => u.FirstName + " " +  u.LastName).FirstOrDefault(),
                         content = comment.Content,
-                        createdOn = comment.CreatedOn,
+                        createdOn = comment.CreatedOn.ToString("MM/dd/yy"),
                     }),
                 };
 
@@ -38,25 +37,33 @@ namespace Blabber.Requests
             });
 
             // ADD A COMMENT TO A POST
-            app.MapPost("/posts/{postId}/comments", (BlabberDbContext db, string comment, int postId, int authorId) =>
+            app.MapPost("/posts/{postId}/comments", (BlabberDbContext db, Comment newComment, int postId) =>
             {
-                if (comment == null)
+                var post = db.Posts.FirstOrDefault(p => p.Id == postId);
+                if (post == null)
                 {
-                    return Results.NotFound("You must type something to submit");
+                    return Results.NotFound("Unable to find post");
                 }
 
-                var response = new Comment
+                if (string.IsNullOrEmpty(newComment.Content))
+                {
+                    return Results.BadRequest("Comments cannot be empty");
+                }
+
+                var authorId = newComment.AuthorId;
+                var comment = new Comment
                 {
                     PostId = postId,
                     AuthorId = authorId,
-                    Content = comment,
+                    Content = newComment.Content,
+                    CreatedOn = DateTime.Now,
                 };
 
                 try
                 {
-                    db.Comments.Add(response);
+                    db.Comments.Add(comment);
                     db.SaveChanges();
-                    return Results.Created($"/posts/{postId}/comments/{response.Id}", response);
+                    return Results.Created($"/posts/{postId}/comments/{comment.Id}", comment);
                 }
                 catch (DbException ex)
                 {
