@@ -12,7 +12,7 @@ namespace Blabber.Requests
         public static void Map(WebApplication app)
         {
             // VIEW ALL REACTIONS
-            app.MapGet("/reactions", (BlabberDbContext db) =>
+            app.MapGet("/reactions/all", (BlabberDbContext db) =>
             {
                 return db.Reactions.ToList();
             });
@@ -71,7 +71,7 @@ namespace Blabber.Requests
             });
 
             // CREATE A REACTION
-            app.MapPost("/reactions", (BlabberDbContext db, Reaction newReaction) =>
+            app.MapPost("/reactions/new", (BlabberDbContext db, Reaction newReaction) =>
             {
                 try
                 {

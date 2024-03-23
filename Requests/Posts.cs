@@ -144,7 +144,7 @@ namespace Blabber.Requests
                         return Results.NotFound();
                     }
 
-                    post.CategoryId = null; 
+                    post.CategoryId = null;
 
                     await db.SaveChangesAsync();
 
